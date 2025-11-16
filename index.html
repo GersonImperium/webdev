@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio | Gerson Carlos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .gyro-bg {
+      position: fixed;
+      inset: 0;
+      background: url(https://lh3.googleusercontent.com/p/AF1QipMeYb0OeQkiJHCa9vQasJ3xeqfEGTv1E9xBBzWY=s680-w680-h510-rw') center/cover no-repeat;
+      transform: translate(0,0);
+      z-index: -2;
+    }
+
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: rgba(0,0,0,0.6);
+    }
+    /* Substituição do título pelo logo */
+    .hero .logo {
+      max-width: 260px;
+      width: 100%;
+      height: auto;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+    }
+
+    .button-primary {
+      background: linear-gradient(45deg, #007bff, #28a745);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .button-primary:hover {
+      transform: scale(1.1);
+    }
+
+    /* FEED CENTRALIZADO (mantido no CSS original) */
+    .feed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      padding: 40px 20px;
+      justify-content: center;
+    }
+    .feed-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+    .feed-card img:hover {
+      transform: scale(1.05);
+    }
+
+    .services-grid, .process-grid, .testimonial-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 20px;
+    }
+
+    .service-card, .process-card, .testimonial-card {
+      flex: 1 1 250px;
+      max-width: 300px;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover, .process-card:hover, .testimonial-card:hover {
+      transform: scale(1.05);
+    }
+
+    .service-card h3, .process-card h3 {
+      color: #28a745;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-quote {
+      font-style: italic;
+    }
+    .testimonial-author {
+      margin-top: 10px;
+      font-weight: 700;
+      color: #28a745;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    /* Slider automático para Meus Trabalhos */
+    .works-slider {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px) saturate(140%);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .work-slide {
+      display: none;
+      width: 100%;
+      align-items: stretch;
+      gap: 32px;
+      padding: 32px;
+      min-height: 420px;
+    }
+    .work-slide.active {
+      display: flex;
+    }
+    .work-image {
+      flex: 0 0 48%;
+      display: block;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .work-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    /* Ajuste para não vazar texto dos cards */
+    .work-info {
+      flex: 1;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      hyphens: auto;
+      padding: 16px 16px;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .work-info h3 {
+      background: linear-gradient(90deg, #28a745, #00d4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .work-info p {
+      color: #cfd3d7;
+      line-height: 1.7;
+      font-size: 1rem;
+      margin: 0;
+      max-width: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 6;
+      word-wrap: break-word;
+    }
+    .details-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      align-self: flex-start;
+    }
+    .details-btn:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+    .work-details {
+      display: none;
+      width: 100%;
+      max-width: 100%;
+      max-height: 40vh;
+      overflow: auto;
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    .work-details.open { display: block; }
+    .work-details h4 { color: #28a745; margin: 0 0 8px 0; font-size: 1.1rem; }
+    .work-details ul { padding-left: 18px; margin: 0; }
+    .work-details li { color: #cfd3d7; margin: 6px 0; }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .slider-dot.active {
+      background: linear-gradient(45deg, #28a745, #00d4ff);
+      transform: scale(1.3);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .lightbox.open {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    /* Formulário de orçamento (envio para WhatsApp) */
+    .form-section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .form-section form {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(255,255,255,0.08);
+      padding: 24px;
+      border-radius: 12px;
+    }
+    .form-section input,
+    .form-section textarea,
+    .form-section select {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    .form-section button {
+      background: linear-gradient(45deg, #28a745, #007bff);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .brief-form {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .brief-form form {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(255,255,255,0.08);
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+    }
+    .brief-form input,
+    .brief-form textarea,
+    .brief-form select {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .works-slider {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 90vw;
+        width: 100%;
+      }
+      .work-slide {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .work-image {
+        flex: 0 0 auto;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+      }
+      .work-image img {
+        height: 100%;
+      }
+      .work-info {
+        max-width: 90vw;
+        width: 100%;
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+      .work-details { max-height: 50vh; }
+    }
+
+    .site-footer {
+      padding: 40px 20px 24px;
+      background: rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+    }
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .footer-brand img {
+      max-width: 160px;
+      border-radius: 12px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .footer-services h4,
+    .footer-contact h4 {
+      margin: 0 0 8px 0;
+      color: #28a745;
+    }
+    .footer-services ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-services li { margin: 6px 0; }
+    .footer-contact a {
+      display: inline-block;
+      margin-right: 12px;
+      color: #cfd3d7;
+      text-decoration: none;
+    }
+    .footer-contact a:hover { color: #fff; }
+    .footer-copy {
+      max-width: 1100px;
+      margin: 16px auto 0;
+      text-align: center;
+      color: #9aa0a6;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gyro-bg" id="gyro"></div>
+  <div id="particles-js"></div>
+
+  <section class="hero">
+    <!-- Substituição do H1 pela logo -->
+    <img class="logo" src="https://lh3.googleusercontent.com/p/AF1QipMeYb0OeQkiJHCa9vQasJ3xeqfEGTv1E9xBBzWY=s680-w680-h510-rw" alt="Logo Gerson Carlos — Graphic & Web Designer" />
+    <p>Design e Desenvolvimento Web de Alto Nível</p>
+    <button class="button-primary">Começar Projeto</button>
+  </section>
+
+
+  <section class="brief-form">
+    <h2>Solicite seu Projeto</h2>
+    <form id="briefForm">
+      <input type="text" name="nome" placeholder="Nome" required />
+      <select name="tipo" required>
+        <option value="" disabled selected>Tipo de Serviço</option>
+        <option>Website institucional</option>
+        <option>Landing page</option>
+        <option>E-commerce</option>
+        <option>Identidade visual</option>
+        <option>App/SaaS</option>
+        <option>Outro</option>
+      </select>
+      <textarea name="descricao" rows="5" placeholder="Descrição" required></textarea>
+      <input type="email" name="email" placeholder="E-mail" required />
+      <input type="tel" name="whatsapp" placeholder="WhatsApp (com DDD)" required />
+      <button type="submit" class="button-primary">Enviar</button>
+    </form>
+  </section>
+
+  <h2>Serviços que Ofereço</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <h3>Web Designer</h3>
+      <p>Criação de sites e sistemas com foco em performance, responsividade e experiência do usuário.</p>
+    </div>
+    <div class="service-card">
+      <h3>Designer Gráfico</h3>
+      <p>Identidade visual, materiais promocionais, posts para redes sociais e design editorial com impacto.</p>
+    </div>
+    <div class="service-card">
+      <h3>Marketing Digital</h3>
+      <p>Estratégias de conteúdo, gestão de tráfego, SEO e campanhas que convertem seguidores em clientes.</p>
+    </div>
+  </div>
+
+  <h2>Meus Trabalhos</h2>
+  <div class="works-slider" id="works-slider">
+    <div class="work-slide active">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipO5H2xkdNgVB4YpmrnhKhNYROpu_Wa1sRN9JEdn=s680-w680-h510-rw" alt="App para Academias" />
+      </div>
+      <div class="work-info">
+        <h3>App para Academias</h3>
+        <p>Aplicativo focado em gestão de treinos e acompanhamento de alunos, com planos personalizados, calendário de treinos e métricas de evolução.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>🏋️‍♂️ FitnessConnect — Aplicativo para Academias</h4>
+          <ul>
+            <li>Desafios patrocinados com prêmios reais.</li>
+            <li>Metas personalizadas como perder peso e treinar semanalmente.</li>
+            <li>Engajamento social com comunidade ativa.</li>
+            <li>Localização de academias próximas.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipN09TbYzFMIPyoXTbn4JDPx9RjbDX3Aiq137DAz=s680-w680-h510-rw" alt="SaaS para Clínicas de Fisioterapia" />
+      </div>
+      <div class="work-info">
+        <h3>SaaS para Clínicas de Fisioterapia</h3>
+        <p>Plataforma online para gestão de pacientes, prontuários, agenda de atendimentos e indicadores de resultado, otimizada para equipes multidisciplinares.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>🧾 FisioPlus Admin — Sistema para Clínicas</h4>
+          <ul>
+            <li>Dashboard com receita, lucro, satisfação e agendamentos.</li>
+            <li>Análise por profissional e tipo de serviço.</li>
+            <li>Agendamento online simplificado para pacientes.</li>
+            <li>Gráficos de crescimento com comparativos mensais.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipMWDWse0VT3vFT3GRAJzCGn0EGk79NTqMo3wBRA=s680-w680-h510-rw" alt="App de Filmes e Cinema" />
+      </div>
+      <div class="work-info">
+        <h3>App de Filmes e Cinema</h3>
+        <p>Aplicativo para explorar catálogos, avaliar títulos, criar listas e compartilhar opiniões com a comunidade, com destaque para estreias e trailers.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>🎬 CineDebate — Plataforma Cinematográfica</h4>
+          <ul>
+            <li>Debates temáticos sobre filmes populares.</li>
+            <li>Produções autorais com espaço para roteiristas.</li>
+            <li>Perfis com histórico e preferências.</li>
+            <li>Comunidade ativa com engajamento criativo.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipOPTDQTyxDr8xZQtUX9fmn6MFWbqoLLAExLv7En=s680-w680-h510-rw" alt="Rede Social para Academias" />
+      </div>
+      <div class="work-info">
+        <h3>Rede Social para Academias</h3>
+        <p>App que conecta alunos e academias, com feed de treinos, desafios, ranking e interação em tempo real, incentivando comunidade e consistência.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>💼 FitnessConnect — Negócios Fitness</h4>
+          <ul>
+            <li>Gestão de metas e desafios com estatísticas.</li>
+            <li>Perfil profissional com plano gratuito e upgrade.</li>
+            <li>Promoções e parcerias como desafios patrocinados.</li>
+            <li>Engajamento com clientes por metas compartilhadas.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipMr9N66r01FclnT0fZZJSGCHFsrWUMGw6SdLd_O=s680-w680-h510-rw" alt="Site de Negócios Locais" />
+      </div>
+      <div class="work-info">
+        <h3>Site de Negócios Locais</h3>
+        <p>Jornal digital de anúncios e serviços locais: oportunidades, ofertas, prestadores, vagas, produtos e informações da região em um só lugar.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>📰 Informe Popular — Promoções e Notícias Locais</h4>
+          <ul>
+            <li>Promoções em tempo real com ofertas em destaque.</li>
+            <li>Categorias por eventos, moda, saúde e gastronomia.</li>
+            <li>Sistema de pontos com recompensas aos usuários.</li>
+            <li>Integração com comércio local e visibilidade digital.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipPCgLg-oc7LsBM6hRs6F0MWGxN69vRABgliy-SA=s680-w680-h510-rw" alt="Site Institucional" />
+      </div>
+      <div class="work-info">
+        <h3>Site Institucional</h3>
+        <p>Informações claras, seguras e relevantes sobre serviços, valores e compromisso com a comunidade, fortalecendo presença e credibilidade.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>🎓 FAPETRUS — Institucional Educacional</h4>
+          <ul>
+            <li>Cursos reconhecidos pelo MEC.</li>
+            <li>Interface moderna e acessível.</li>
+            <li>Canal direto via WhatsApp.</li>
+            <li>Ambiente positivo e acolhedor.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-slide">
+      <div class="work-image">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipNTYw3US7YDc0InSm260uIRBK0rZNc7r9CwwkvD=s680-w680-h510-rw" alt="Site para Clínicas e Consultórios" />
+      </div>
+      <div class="work-info">
+        <h3>Site para Clínicas e Consultórios</h3>
+        <p>Site profissional que transmite segurança, reforça autoridade e aumenta a confiança dos pacientes antes mesmo da primeira consulta.</p>
+        <button class="details-btn" type="button" aria-expanded="false">Detalhes</button>
+        <div class="work-details" aria-hidden="true">
+          <h4>🏥 Olimpicafit — Clínicas e Consultórios</h4>
+          <ul>
+            <li>Apresentação com 10+ anos, 5000+ pacientes, 98% satisfação.</li>
+            <li>Design responsivo para celular e computador.</li>
+            <li>Informações claras sobre serviços e profissionais.</li>
+            <li>Agendamento facilitado e maior conversão.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="slider-dots" id="slider-dots"></div>
+
+  <div id="lightbox" class="lightbox"><img id="lightbox-img" alt="" /></div>
+
+  <h2>Processo Criativo</h2>
+  <div class="process-grid">
+    <div class="process-card">
+      <h3>1. Imersão</h3>
+      <p>Entendimento profundo da marca, público e objetivos.</p>
+    </div>
+    <div class="process-card">
+      <h3>2. Criação</h3>
+      <p>Wireframes, identidade visual e protótipos funcionais.</p>
+    </div>
+    <div class="process-card">
+      <h3>3. Execução</h3>
+      <p>Desenvolvimento técnico com performance e SEO.</p>
+    </div>
+  </div>
+
+  <h2>Depoimentos</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"Extremamente profissional, criativo e paciente."</p>
+      <p class="testimonial-author">— Carla S., CEO</p>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"Qualidade altíssima, superou expectativas."</p>
+      <p class="testimonial-author">— Thiago M., Diretor</p>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"Código limpo e performance excelente."</p>
+      <p class="testimonial-author">— Lucas V., Dev Front-end</p>
+    </div>
+  </div>
+
+  <section class="cta">
+    <h2>Pare de Sonhar, Comece a Construir!</h2>
+    <button class="button-primary">Fale com o Expert Agora</button>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipMeYb0OeQkiJHCa9vQasJ3xeqfEGTv1E9xBBzWY=s680-w680-h510-rw" alt="Logo" />
+        <p>Gerson Carlos — Graphic & Web Designer</p>
+      </div>
+      <div class="footer-services">
+        <h4>Serviços</h4>
+        <ul>
+          <li>Web Designer</li>
+          <li>Designer Gráfico</li>
+          <li>Marketing Digital</li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contatos</h4>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://wa.me/5598999999999" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 Gerson Carlos. Todos os direitos reservados.</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script>
+    // Partículas
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        size: { value: 3 },
+        move: { speed: 2 },
+        line_linked: { enable: true }
+      }
+    });
+
+    // Efeito de gyro no background
+    const gyro = document.getElementById('gyro');
+    document.addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      gyro.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+    });
+
+    // Slider automático + controles
+    const slides = document.querySelectorAll('.work-slide');
+    const dotsContainer = document.getElementById('slider-dots');
+    const dots = [];
+    let currentIndex = 0;
+    let autoTimer = null;
+    const intervalMs = 5000;
+
+    function showSlide(index) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      showSlide(currentIndex);
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showSlide(currentIndex);
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(nextSlide, intervalMs);
+    }
+
+    function stopAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+    }
+
+    // Inicia automático
+    showSlide(currentIndex);
+    startAuto();
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot';
+      dot.setAttribute('aria-label', `Ir para slide ${i+1}`);
+      dot.addEventListener('click', () => {
+        currentIndex = i;
+        showSlide(currentIndex);
+        startAuto();
+      });
+      dotsContainer.appendChild(dot);
+      dots.push(dot);
+    });
+    showSlide(currentIndex);
+
+    // Pausar ao passar mouse sobre a área do slider (opcional)
+    const slider = document.getElementById('works-slider');
+    slider.addEventListener('mouseenter', stopAuto);
+    slider.addEventListener('mouseleave', startAuto);
+
+    // Navegação por teclado (setas)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { nextSlide(); startAuto(); }
+      if (e.key === 'ArrowLeft') { prevSlide(); startAuto(); }
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) { closeLightbox(); }
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('open');
+      stopAuto();
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+      startAuto();
+    }
+    document.querySelectorAll('.work-image img').forEach((img) => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', () => openLightbox(img.src));
+    });
+    lightbox.addEventListener('click', closeLightbox);
+
+    document.querySelectorAll('.details-btn').forEach((btn) => {
+      const info = btn.closest('.work-info');
+      const details = info.querySelector('.work-details');
+      btn.addEventListener('click', () => {
+        const open = details.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open);
+        details.setAttribute('aria-hidden', (!open).toString());
+        if (open) stopAuto(); else startAuto();
+      });
+    });
+
+    // Detalhes do slider já tratados acima
+  </script>
+
+</body>
+</html>
